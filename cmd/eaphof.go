@@ -21,6 +21,11 @@ var upgrader = websocket.Upgrader{
 var jugadores jugador.Jugadores
 
 func main() {
+	hostPort := os.Getenv("HOSTPORT")
+	if hostPort == "" {
+		hostPort = "localhost:8000"
+	}
+
 	e := echo.New()
 
 	e.Use(middleware.Logger())
@@ -55,10 +60,6 @@ func main() {
 		return nil
 	})
 
-	hostPort := os.Getenv("HOSTPORT")
-	if hostPort == "" {
-		hostPort = "localhost:8000"
-	}
 	e.Logger.Fatal(e.Start(hostPort))
 }
 
