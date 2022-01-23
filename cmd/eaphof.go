@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
@@ -54,7 +55,11 @@ func main() {
 		return nil
 	})
 
-	e.Logger.Fatal(e.Start("192.168.1.151:8000"))
+	hostPort := os.Getenv("HOSTPORT")
+	if hostPort == "" {
+		hostPort = "localhost:8000"
+	}
+	e.Logger.Fatal(e.Start(hostPort))
 }
 
 func read(hub *Hub, client *websocket.Conn) {
@@ -69,7 +74,6 @@ func read(hub *Hub, client *websocket.Conn) {
 		if respuesta.Corrige() {
 			encontrado := false
 			for _, j := range jugadores {
-				log.Printf("%s == %s -> %t", j.Nick, respuesta.Nick, j.Nick == respuesta.Nick)
 				if j.Nick == respuesta.Nick {
 					j.AddPoint()
 					encontrado = true
@@ -81,7 +85,6 @@ func read(hub *Hub, client *websocket.Conn) {
 				jugadores = append(jugadores, &jugador.Jugador{Nick: respuesta.Nick, Puntos: 1})
 			}
 		}
-		log.Println(respuesta)
 		hub.broadcast <- jugadores
 	}
 }
