@@ -1,4 +1,4 @@
-package jugador
+package domain
 
 import (
 	"testing"

@@ -5,18 +5,18 @@ import (
 	"log"
 
 	"github.com/gorilla/websocket"
-	"rownrepo.duckdns.org/roberto/eaphof-back/data/jugador"
+	"rownrepo.duckdns.org/roberto/eaphof-back/internal/core/domain"
 )
 
 type Hub struct {
 	clients   map[*websocket.Conn]bool
-	broadcast chan jugador.Jugadores
+	broadcast chan domain.Jugadores
 }
 
 func NewHub() *Hub {
 	return &Hub{
 		clients:   make(map[*websocket.Conn]bool),
-		broadcast: make(chan jugador.Jugadores),
+		broadcast: make(chan domain.Jugadores),
 	}
 }
 

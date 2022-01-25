@@ -1,4 +1,4 @@
-package respuesta
+package domain
 
 type Respuesta struct {
 	Nick      string
@@ -8,4 +8,8 @@ type Respuesta struct {
 
 func (r Respuesta) Corrige() bool {
 	return true
+}
+
+func (r Respuesta) Guarda() error {
+	return nil
 }

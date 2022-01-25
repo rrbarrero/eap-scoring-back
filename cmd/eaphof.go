@@ -9,8 +9,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"rownrepo.duckdns.org/roberto/eaphof-back/data/jugador"
-	"rownrepo.duckdns.org/roberto/eaphof-back/data/respuesta"
+	"rownrepo.duckdns.org/roberto/eaphof-back/internal/core/domain"
 )
 
 var upgrader = websocket.Upgrader{
@@ -18,7 +17,7 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-var jugadores jugador.Jugadores
+var jugadores domain.Jugadores
 
 func main() {
 	hostPort := os.Getenv("HOSTPORT")
@@ -65,7 +64,7 @@ func main() {
 
 func read(hub *Hub, client *websocket.Conn) {
 	for {
-		var respuesta respuesta.Respuesta
+		var respuesta domain.Respuesta
 		err := client.ReadJSON(&respuesta)
 		if !errors.Is(err, nil) {
 			log.Printf("error courred: %v", err)
@@ -83,7 +82,7 @@ func read(hub *Hub, client *websocket.Conn) {
 				}
 			}
 			if !encontrado {
-				jugadores = append(jugadores, &jugador.Jugador{Nick: respuesta.Nick, Puntos: 1})
+				jugadores = append(jugadores, &domain.Jugador{Nick: respuesta.Nick, Puntos: 1})
 			}
 		}
 		hub.broadcast <- jugadores

@@ -1,4 +1,4 @@
-package jugador
+package domain
 
 type Jugador struct {
 	Nick   string `json:"nick"`
